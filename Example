@@ -148,6 +148,38 @@ contract RicoContract is Ownable {
 	Order[] public orders;
 	
 	mapping( address => mapping( uint256 => uint256 ) ) public stageBalances;
+	
+
+	/*--------------------------------------------*/
+	address[] public templates;
+	
+	/**
+     * @dev Add template contract to  arr
+     * @param _address template contract address
+     */
+	function addTemplate( address _address ) public onlyOwner
+	{
+	    templates.push( _address );
+	}
+	
+	/**
+     * @dev Burn the tokens & check that msg.sender is in the templates array
+     * @param _address owner of tokens
+     */
+	function depositeTokens( address _address ) public
+	{
+	    bool _checked = false;
+	    for( uint256 i = 0; i <= templates.length - 1; i++ ){
+	        if ( templates[i] == msg.sender ) _checked = true;
+	    }
+	    
+	    require( _checked );
+	    
+	    uint256 PRICE = 1 ether;
+	    require( _balances[_address] >= PRICE );
+	    _burn(_address, PRICE);
+	}
+	/*--------------------------------------------*/
 
 	modifier onlyValidStage() {
 		require( getCurrentStage() > 0 );
@@ -236,47 +268,47 @@ contract RicoContract is Ownable {
 	constructor() public {
 		
 		stages.push(Stage({
-			leadTime: 1 days, 
+			leadTime: 20 minutes, 
 			startTime: 0,
 			amount:0,
-			amountLimit: 3 ether,
-			price: 0.1 ether,
+			amountLimit: 0.1 ether,
+			price: 0.001 ether,
 			additional: false
 		}));
 		
 		stages.push(Stage({
-			leadTime: 7 days, 
+			leadTime: 20 minutes, 
 			startTime: 0,
 			amount:0,
-			amountLimit: 11 ether,
-			price: 0.1 ether,
+			amountLimit: 0.1 ether,
+			price: 0.002 ether,
 			additional: false
 		}));
 		
 		stages.push(Stage({
-			leadTime: 7 days, 
+			leadTime: 20 minutes, 
 			startTime: 0,
 			amount:0,
-			amountLimit:  4.5 ether,
-			price: 0.1 ether,
+			amountLimit: 0.1 ether,
+			price: 0.002 ether,
 			additional: false
 		}));
 		
 		stages.push(Stage({
-			leadTime: 30 days, 
+			leadTime: 20 minutes,  
 			startTime: 0,
 			amount:0,
-			amountLimit:  12.7 ether,
-			price: 0.1 ether,
+			amountLimit: 0.1 ether,
+			price: 0.002 ether,
 			additional: false
 		}));
 		
 		stages.push(Stage({
-			leadTime: 7 days, 
+			leadTime: 20 minutes,  
 			startTime: 0,
 			amount:0,
-			amountLimit:  3.5 ether,
-			price: 0.1 ether,
+			amountLimit: 1 ether,
+			price: 0.05 ether,
 			additional: false
 		}));
 
